@@ -16,7 +16,7 @@ namespace base
             Condition(Mutex& mutex)
                 : mutex_(mutex)
             {
-                pthread_cond_init(&cond_);
+                pthread_cond_init(&cond_, NULL);
             }
 
             ~Condition()
@@ -26,7 +26,7 @@ namespace base
 
             void wait()
             {
-                pthread_cond_wait(&cond_, &mutex_);
+                pthread_cond_wait(&cond_, mutex_.getRawMutex());
             }
 
             void notify()
@@ -39,6 +39,7 @@ namespace base
                 pthread_cond_broadcast(&cond_);
             }
 
+            bool waitForSecs(unsigned int nSecs);
         private:
             Mutex& mutex_;
             pthread_cond_t cond_;

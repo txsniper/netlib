@@ -14,7 +14,7 @@ namespace base
         public:
             Mutex()
             {
-                pthread_mutex_init(&mutex_);
+                pthread_mutex_init(&mutex_, NULL);
             }
             ~Mutex()
             {
@@ -26,30 +26,35 @@ namespace base
                 pthread_mutex_lock(&mutex_);
             }
 
-            void unLock()
+            void unlock()
             {
                 pthread_mutex_unlock(&mutex_);
             }
 
+            pthread_mutex_t* getRawMutex()
+            {
+                return &mutex_;
+            }
+
         private:
-            pthread_mutext_t mutex_;
+            pthread_mutex_t mutex_;
     };
 
     class MutexLockGuard
     {
         public:
-            MutexLock(Mutex& mutex_)
+            MutexLockGuard(Mutex& mutex_)
                 : mutexlock_(mutex_)
             {
                 mutexlock_.lock();
             }
-            ~MutexLock()
+            ~MutexLockGuard()
             {
                 mutexlock_.unlock();
             }
         private:
             Mutex& mutexlock_;
-    }
+    };
 }
 
 }
