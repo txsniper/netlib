@@ -1,0 +1,2 @@
+add_executable(threadTest threadTest.cc)
+target_link_libraries(threadTest netlib_base_cpp11)
