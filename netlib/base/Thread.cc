@@ -35,6 +35,8 @@ void Thread::runInThread()
     threadFunc_();
 }
 
+
+
 void* Thread::beginThread(void* data)
 {
     Thread* threadObj = static_cast<Thread*>(data);

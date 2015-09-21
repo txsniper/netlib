@@ -2,6 +2,7 @@ set(base_SRCS
     Condition.cc
     ThreadInfo.cc
     Thread.cc
+    ThreadPool.cc
     )
 #add_library(netlib_base ${base_SRCS})
 #target_link_libraries(netlib_base pthread rt)

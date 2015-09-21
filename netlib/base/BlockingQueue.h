@@ -22,7 +22,7 @@ class BlockingQueueT : netlib::base::noncopyable
 
         }
 
-        void Push(const T& t)
+        void push(const T& t)
         {
             MutexLockGuard guard(mutex_);
             queue_.push_back(t);
@@ -33,7 +33,7 @@ class BlockingQueueT : netlib::base::noncopyable
         {
             MutexLockGuard guard(mutex_);
             while (queue_.empty()) {
-                cond_wait();
+                cond_.wait();
             }
             T t = queue_.front();
             queue_.pop_front();
