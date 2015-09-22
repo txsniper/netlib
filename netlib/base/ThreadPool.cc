@@ -25,6 +25,7 @@ namespace base
 
     bool ThreadPool::start()
     {
+        running_ = true;
         for(int i = 0; i < threadNum_; i++)
         {
             char workerName[20] = {0};
@@ -37,11 +38,21 @@ namespace base
         return true;
     }
 
+    void ThreadPool::defaultExitFunc()
+    {
+
+    }
+
     bool ThreadPool::stop()
     {
         {
             MutexLockGuard guard(runningMutex_);
             running_ = false;
+        }
+        for(Thread* t : threadVec_)
+        {
+            (void)t;
+            taskQueue_.push(std::bind(&ThreadPool::defaultExitFunc, this));
         }
         for(int i=0; i < threadNum_; i++)
         {

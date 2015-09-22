@@ -25,6 +25,7 @@ namespace base
             void runTask(const Task& task);
         private:
             void run();
+            void defaultExitFunc();
             std::string name_;
             int threadNum_;
             bool running_;
