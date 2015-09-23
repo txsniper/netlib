@@ -1,4 +1,5 @@
 #include <netlib/base/ThreadPool.h>
+#include <netlib/base/ThreadInfo.h>
 #include <stdio.h>
 namespace netlib
 {
@@ -40,7 +41,8 @@ namespace base
 
     void ThreadPool::defaultExitFunc()
     {
-
+       // int currTid = ThreadInfo::tid();
+       // printf("Thread %d exit\n", currTid);
     }
 
     bool ThreadPool::stop()
@@ -54,9 +56,8 @@ namespace base
             (void)t;
             taskQueue_.push(std::bind(&ThreadPool::defaultExitFunc, this));
         }
-        for(int i=0; i < threadNum_; i++)
+        for(Thread* t : threadVec_)
         {
-            Thread* t = threadVec_[i];
             t->join();
         }
         return true;
@@ -72,6 +73,7 @@ namespace base
                 MutexLockGuard guard(runningMutex_);
                 running = running_;
             }
+            // 可能任务线程池中还有任务未执行完成，也会退出
             if (!running)
             {
                 break;

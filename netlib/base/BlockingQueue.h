@@ -46,6 +46,12 @@ class BlockingQueueT : netlib::base::noncopyable
             return queue_.size();
         }
 
+        bool empty()
+        {
+            MutexLockGuard guard(mutex_);
+            return queue_.size() == 0;
+        }
+
     private:
         Mutex mutex_;
         Condition cond_;

@@ -3,6 +3,7 @@
 #include <functional>
 #include <iostream>
 #include <stdio.h>
+#include <unistd.h>
 using namespace netlib::base;
 
 class Task
@@ -11,20 +12,34 @@ class Task
         void run()
         {
             int currTid = ThreadInfo::tid();
-            for(int i=0; i<10; i++)
-            {
-                printf("CurrThread : %d run %d\n", currTid, i);
-            }
+            fprintf(stdout,"CurrThread : %d run task\n", currTid);
+            sleep(1);
+        }
+        ~Task()
+        {
+
         }
 };
+
 int main()
 {
-    Task taskVec[5];
-    ThreadPool tp("threadpool", 3);
-    for(Task a : taskVec)
+    //Task taskVec[5];
+    Task* taskVec[20];
+    for(int i = 0; i < 20; i++)
     {
-        tp.runTask(std::bind(&Task::run, &a));
+        taskVec[i] = new Task();
     }
+    ThreadPool tp("threadpool", 3);
     tp.start();
-
+    for(Task *a : taskVec)
+    {
+        tp.runTask(std::bind(&Task::run, a));
+    }
+    // 延迟10秒，否则任务还没来得及被线程池执行，线程池就马上退出了
+    sleep(10);
+    tp.stop();
+    for(Task* a : taskVec)
+    {
+        delete a;
+    }
 }
