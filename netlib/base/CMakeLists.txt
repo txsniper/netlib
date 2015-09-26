@@ -3,6 +3,7 @@ set(base_SRCS
     ThreadInfo.cc
     Thread.cc
     ThreadPool.cc
+    CountDownLatch.cc
     )
 #add_library(netlib_base ${base_SRCS})
 #target_link_libraries(netlib_base pthread rt)
