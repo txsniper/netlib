@@ -1,6 +1,7 @@
 #ifndef NETLIB_BASE_TIMESTAMP
 #define NETLIB_BASE_TIMESTAMP
 
+#include <time.h>
 #include <stdint.h>
 #include <string>
 namespace netlib
@@ -58,6 +59,10 @@ namespace base
                 return microSecondsUTC_;
             }
 
+            time_t toTimeT() const
+            {
+                return static_cast<time_t> (microSecondsUTC_ / MICRO_SECONDS_PER_SECOND);
+            }
 
             static TimeStamp now();
 
